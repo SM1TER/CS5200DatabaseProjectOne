@@ -11,6 +11,7 @@ using namespace std;
 
 class Table {
     public:
+        Table() {}
         Table(string columns) {
             stringstream ss(columns);
             while (ss.good()) {
@@ -28,6 +29,7 @@ class Table {
         void insert_into(Row row);
         Table select(string columns);
         Table where(string condition);
+        Table mergeTables(Table table2);
     private:
         vector<Row> m_rows;
         vector<string> m_column_names;
