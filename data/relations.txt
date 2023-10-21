@@ -1,0 +1,6 @@
+studentId->firstName
+studentId->lastName
+course->courseStart
+course->courseEnd
+course->professor
+professor->professorEmail
