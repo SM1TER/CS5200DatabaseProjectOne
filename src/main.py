@@ -19,6 +19,18 @@ def findPrimaryKeys(relations: list[Relation]):
             k.remove(m)
     return list(set(k))
 
+def constructCreateTableQuery(tableName, keys, primaryKeys):
+    query = f'CREATE TABLE IF NOT EXISTS {tableName}('
+    for x in keys:
+        query = f'{query}{x} TEXT'
+        if(x in primaryKeys):
+            query = f'{query} KEY'
+        if(keys[-1] != x):
+            query = f'{query},'
+
+    query = f'{query})'
+    return query
+
 os.remove('school.db') # removes old school.db file 
 connection = sqlite3.connect('school.db') # create a new students database file
 cursor = connection.cursor() # creates a cursor to interact with the database
@@ -27,7 +39,7 @@ cursor = connection.cursor() # creates a cursor to interact with the database
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS
 students(
-    studentId INTEGER,
+    studentId TEXT,
     firstName TEXT,
     lastName TEXT,
     course TEXT,
@@ -43,10 +55,11 @@ file = open('data/exampleInputTable1.csv', 'r')
 file.readline()
 for x in file:
     studentId, firstName, lastName, course, professor, professorEmail, courseStart, courseEnd = x.strip('\n').split(",")
-    query = f'INSERT INTO students VALUES ({studentId}, \'{firstName}\', \'{lastName}\', \'{course}\', \'{professor}\', \'{professorEmail}\', \'{courseStart}\', \'{courseEnd}\')'
+    query = f'INSERT INTO students VALUES (\'{studentId}\', \'{firstName}\', \'{lastName}\', \'{course}\', \'{professor}\', \'{professorEmail}\', \'{courseStart}\', \'{courseEnd}\')'
     print(query)
     cursor.execute(query)
 file.close()
+
 # sanity check to see the data was added to the students table
 cursor.execute("SELECT * FROM students")
 print(cursor.fetchall())
@@ -59,5 +72,13 @@ relations = []
 for x in file:
     relations.append(Relation(x.strip('\n').split('->')))
 
+print('')
 print(f'Primary keys {findPrimaryKeys(relations)}')
+
+file = open('data/exampleInputTable1.csv', 'r')
+k = file.readline().strip('\n').split(',')
+cursor.execute(constructCreateTableQuery('testTable', k, findPrimaryKeys(relations)))
+
+cursor.execute("SELECT * FROM testTable")
+print(cursor.fetchall())
 #input("Which normal form level would you like?")
