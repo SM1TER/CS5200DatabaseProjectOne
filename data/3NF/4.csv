@@ -1,4 +1,4 @@
-Course,Professor,ProfessorEmail
-Math101,Dr.Smith,smith@mst.edu
-CS101,Dr.Jones,jones@mst.edu
-Bio101,Dr.Watson,watson@mst.edu
+Professor,ProfessorEmail
+Dr.Smith,smith@mst.edu
+Dr.Jones,jones@mst.edu
+Dr.Watson,watson@mst.edu
