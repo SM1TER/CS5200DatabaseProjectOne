@@ -30,8 +30,10 @@ def constructCreateTableQuery(tableName, keys, primaryKeys):
 
     query = f'{query})'
     return query
-
-os.remove('school.db') # removes old school.db file 
+try:
+    os.remove('school.db') # removes old school.db file
+except: 
+    print('file not found')
 connection = sqlite3.connect('school.db') # create a new students database file
 cursor = connection.cursor() # creates a cursor to interact with the database
 
