@@ -1,35 +1,7 @@
 import sqlite3
 import os
+import helper
 
-class Relation:
-    # x -> y
-    def __init__(self, xToY):
-        self.x: str = xToY[0]
-        self.y: str = xToY[1]
-
-def findPrimaryKeys(relations: list[Relation]):
-    k = []
-    for r in relations:
-        k.append(r.x)
-    means = []
-    for r in relations:
-        means.append(r.y)
-    for m in means:
-        if(m in k):
-            k.remove(m)
-    return list(set(k))
-
-def constructCreateTableQuery(tableName, keys, primaryKeys):
-    query = f'CREATE TABLE IF NOT EXISTS {tableName}('
-    for x in keys:
-        query = f'{query}{x} TEXT'
-        if(x in primaryKeys):
-            query = f'{query} KEY'
-        if(keys[-1] != x):
-            query = f'{query},'
-
-    query = f'{query})'
-    return query
 try:
     os.remove('school.db') # removes old school.db file
 except: 
@@ -72,14 +44,14 @@ connection.commit()
 file = open('data/relations.txt', 'r')
 relations = []
 for x in file:
-    relations.append(Relation(x.strip('\n').split('->')))
+    relations.append(helper.Relation(x.strip('\n').split('->')))
 
 print('')
-print(f'Primary keys {findPrimaryKeys(relations)}')
+print(f'Primary keys {helper.findPrimaryKeys(relations)}')
 
 file = open('data/exampleInputTable1.csv', 'r')
 k = file.readline().strip('\n').split(',')
-cursor.execute(constructCreateTableQuery('testTable', k, findPrimaryKeys(relations)))
+cursor.execute(helper.constructCreateTableQuery('testTable', k, helper.findPrimaryKeys(relations)))
 
 cursor.execute("SELECT * FROM testTable")
 print(cursor.fetchall())
