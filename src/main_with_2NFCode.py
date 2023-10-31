@@ -23,11 +23,11 @@ def removeColumns(connection, table1, table2):
     cursor = connection.cursor()
     
     # Get the list of columns in the students table
-    cursor.execute(f"PRAGMA table_info({table1})")  # SQLite-specific, adjust for your database
+    cursor.execute(f"PRAGMA table_info({table1})")  #
     student_columns = [column[1] for column in cursor.fetchall()]
     
     # Get the list of columns in the course table
-    cursor.execute(f"PRAGMA table_info({table2})")  # SQLite-specific, adjust for your database
+    cursor.execute(f"PRAGMA table_info({table2})")  
     course_columns = [column[1] for column in cursor.fetchall()]
 
     # Identify the common columns between students and course tables
@@ -77,7 +77,6 @@ def normalize_2nf(connection, table_name, relations):
     cursor.execute(query)
     cursor.execute(f"INSERT INTO key_table SELECT {table_name}.{No_PFD[0]}, {table_name}.{No_PFD[1]} FROM {table_name};")
     removeColumns(connection, table_name, primary_keys[1])
-
     #Here i want to make a table with 
     query = constructCreateTableQuery(primary_keys[1], temp, primary_keys)
     cursor.execute(query)
