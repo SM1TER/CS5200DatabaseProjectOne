@@ -50,3 +50,24 @@ def deleteTable(tableName):
 def insertIntoTable(tableName, values list[str]):
     query = f'INSERT INTO {tableName}'
     return query
+    
+def removeColumns(connection, table1, table2):
+    cursor = connection.cursor()
+    
+    # Get the list of columns in the students table
+    cursor.execute(f"PRAGMA table_info({table1})")  #
+    student_columns = [column[1] for column in cursor.fetchall()]
+    
+    # Get the list of columns in the course table
+    cursor.execute(f"PRAGMA table_info({table2})")  
+    course_columns = [column[1] for column in cursor.fetchall()]
+
+    # Identify the common columns between students and course tables
+    columns_to_remove = [column for column in student_columns if column in course_columns]
+    
+    # Generate the ALTER TABLE query to remove the common columns
+    for column in columns_to_remove:
+        cursor.execute(f"ALTER TABLE {table1} DROP COLUMN {column}")
+    
+    # Commit the changes
+    connection.commit()
