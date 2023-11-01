@@ -78,9 +78,9 @@ def normalize_2nf(connection, table_name, relations):
     cursor.execute(f"INSERT INTO key_table SELECT {table_name}.{No_PFD[0]}, {table_name}.{No_PFD[1]} FROM {table_name};")
     removeColumns(connection, table_name, primary_keys[1])
     #Here i want to make a table with 
-    query = constructCreateTableQuery(primary_keys[1], temp, primary_keys)
+    query = constructCreateTableQuery(primary_keys[0], temp, primary_keys)
     cursor.execute(query)
-    cursor.execute(f"INSERT INTO {primary_keys[1]} SELECT {table_name}.{temp[0]}, {table_name}.{temp[1]},{table_name}.{temp[2]},{table_name}.{temp[3]}, {table_name}.{temp[4]} FROM {table_name};")
+    cursor.execute(f"INSERT INTO {primary_keys[0]} SELECT {table_name}.{temp[0]}, {table_name}.{temp[1]},{table_name}.{temp[2]},{table_name}.{temp[3]}, {table_name}.{temp[4]} FROM {table_name};")
     removeColumns(connection, table_name, primary_keys[1])
     # Commit the changes
     connection.commit()
